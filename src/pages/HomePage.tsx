@@ -1,30 +1,12 @@
-import { Button } from "@/components/ui/button"
-import { TbDental } from "react-icons/tb";
+
+import Header from "../components/layout/Header";
+import HeroSection from "./sections/HeroSection";
 
 export default function HomePage() {
   return (
-        <header className="border-b bg-[#1C352D] backdrop-blur text-white supports-[backdrop-filter]:bg-green-1000 sticky top-0 z-50">
-            <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                <div className="flex items-center">
-                    <TbDental className="text-4xl text-lime-100" />
-                    <h1 className="text-2xl font-bold text-white">DentalWell Pro</h1>
-                </div>
-                <nav className="hidden md:flex items-center space-x-6">
-                    <a href="#services" className="text-sm font-medium hover:text-lime-100 transition-colors">
-                    Services
-                    </a>
-                    <a href="#about" className="text-sm font-medium hover:text-lime-100 transition-colors">
-                    About
-                    </a>
-                    <a href="#contact" className="text-sm font-medium hover:text-lime-100 transition-colors">
-                    Contact
-                    </a>
-                    <Button className="bg-white text-black cursor-pointer hover:bg-lime-50 hover:text-black" >
-                    Login
-                    </Button>
-                    <Button className="bg-white text-black cursor-pointer hover:bg-lime-50 hover:text-black">Book Appointment</Button>
-                </nav>
-            </div>
-        </header>
+        <div className="min-h-screen bg-gray-50">
+            <Header />
+            <HeroSection />
+        </div>
   )
 }
