@@ -1,29 +1,7 @@
-import { Calendar, Users, Shield, Clock } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { FEATURES_DATA } from "@/data/features";
 
 export default function Features() {
-    const features = [
-    {
-      icon: Calendar,
-      title: "Easy Appointment Booking",
-      description: "Book appointments online 24/7 with our simple scheduling system",
-    },
-    {
-      icon: Users,
-      title: "Expert Dental Care",
-      description: "Our experienced team provides comprehensive dental services",
-    },
-    {
-      icon: Shield,
-      title: "Secure & Private",
-      description: "Your medical information is protected with industry-standard security",
-    },
-    {
-      icon: Clock,
-      title: "Flexible Hours",
-      description: "Extended hours and weekend appointments available",
-    },
-  ]
 
   return (
    <section className="relative h-screen pt-20">
@@ -40,7 +18,7 @@ export default function Features() {
     </div>
 
     <div className="relative z-10 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {features.map((feature, index) => (
+      {FEATURES_DATA.map((feature, index) => (
         <Card key={index} className="text-center hover:shadow-lg transition-shadow bg-white">
           <CardHeader>
             <div className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
