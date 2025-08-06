@@ -5,3 +5,9 @@ export interface Feature {
   title: string
   description: string
 }
+
+export interface Testimonial {
+  name: string
+  rating: number
+  comment: string
+}
