@@ -2,6 +2,7 @@
 import Header from "../components/layout/Header";
 import Features from "./sections/Features";
 import HeroSection from "./sections/HeroSection";
+import Testimonials from "./sections/Testimonials";
 
 export default function HomePage() {
   return (
@@ -9,6 +10,7 @@ export default function HomePage() {
             <Header />
             <HeroSection />
             <Features />
+            <Testimonials />
         </div>
   )
 }
