@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import dentalImg from '../../assets/Cosmetic-Dentistry.jpg'
 
 export default function HeroSection() {
   return (
@@ -42,7 +43,7 @@ export default function HeroSection() {
                         </div>
                     </div>
                     <div className="relative">
-                    <img src="/placeholder.svg?height=600&width=500" alt="Dental Care" className="rounded-2xl shadow-2xl" />
+                    <img src={dentalImg} alt="Dental Care" className="rounded-2xl shadow-2xl" />
                     <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg">
                         <div className="flex items-center space-x-3">
                         <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
