@@ -4,7 +4,7 @@ import { FEATURES_DATA } from "@/data/features";
 export default function Features() {
 
   return (
-   <section className="relative h-screen pt-20">
+   <section className="relative h-screen pt-20 bg-gray-100">
      <div className="container mx-auto px-4 relative h-full">
     <div className="absolute top-80 bottom-0 left-0 right-0 bg-green-800 z-0"></div>
 
