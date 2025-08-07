@@ -1,4 +1,5 @@
 
+import Footer from "@/components/layout/Footer";
 import Header from "../components/layout/Header";
 import Features from "./sections/Features";
 import HeroSection from "./sections/HeroSection";
@@ -11,6 +12,7 @@ export default function HomePage() {
             <HeroSection />
             <Features />
             <Testimonials />
+            <Footer />
         </div>
   )
 }
