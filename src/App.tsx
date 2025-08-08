@@ -1,12 +1,9 @@
-import { Button } from "./components/ui/button"
+import HomePage from "./pages/HomePage"
 
 function App() {
   return (
     <>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-        <Button className="bg-blue-600 text-white">Test button</Button>
-      </h1>
+      <HomePage/>
     </>
   )
 }
