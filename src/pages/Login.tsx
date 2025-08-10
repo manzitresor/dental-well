@@ -7,11 +7,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react'
 import {Link, useNavigate} from 'react-router-dom'
 import { TbDental } from "react-icons/tb"
+import { loginSchema } from "@/utils/schema"
+import z from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+type LoginSchema = z.infer<typeof loginSchema>
 
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  })
+
+  const onSubmit = (data: LoginSchema) => {
+    console.log("Form submitted with data:", data);
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
@@ -38,7 +56,7 @@ export default function LoginPage() {
           </CardHeader>
           
           <CardContent>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} >
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
@@ -46,7 +64,9 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   placeholder="Enter your email"
+                  {...register("email")}
                 />
+                {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
               </div>
 
               <div className="space-y-2">
@@ -56,6 +76,7 @@ export default function LoginPage() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
+                    {...register("password")}
                   />
                   <Button
                     type="button"
@@ -70,6 +91,7 @@ export default function LoginPage() {
                       <Eye className="h-4 w-4 text-gray-400" />
                     )}
                   </Button>
+                   {errors.password && <p className="text-sm text-red-600">{errors.password.message}</p>}
                 </div>
               </div>
 
