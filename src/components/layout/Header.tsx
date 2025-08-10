@@ -1,5 +1,6 @@
 import { TbDental } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -10,17 +11,17 @@ export default function Header() {
                 <h1 className="text-2xl font-bold text-white">DentalWell Pro</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
-                <a href="#services" className="text-sm font-medium hover:text-lime-100 transition-colors">
+                <Link to="#services" className="text-sm font-medium hover:text-lime-100 transition-colors">
                 Services
-                </a>
-                <a href="#about" className="text-sm font-medium hover:text-lime-100 transition-colors">
+                </Link>
+                <Link to="#about" className="text-sm font-medium hover:text-lime-100 transition-colors">
                 About
-                </a>
-                <a href="#contact" className="text-sm font-medium hover:text-lime-100 transition-colors">
+                </Link>
+                <Link to="#contact" className="text-sm font-medium hover:text-lime-100 transition-colors">
                 Contact
-                </a>
+                </Link>
                 <Button className="bg-white text-black cursor-pointer hover:bg-lime-50 hover:text-black" >
-                Login
+                <Link to='/login'>Login</Link>
                 </Button>
                 <Button className="bg-white text-black cursor-pointer hover:bg-lime-50 hover:text-black">Book Appointment</Button>
             </nav>
