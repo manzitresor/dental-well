@@ -13,8 +13,8 @@ export interface Testimonial {
 }
 
 export enum UserRole {
-    ADMIN = 'Admin',
-    MEMBER = 'Member',
+    DOCTOR = 'DOCTOR',
+    PATIENT = 'PATIENT',
 }
 
 export interface User {
