@@ -8,8 +8,13 @@ import {Link, useNavigate} from 'react-router-dom'
 import { TbDental } from "react-icons/tb"
 import { loginSchema } from "@/utils/schema"
 import z from "zod"
-import { useForm } from "react-hook-form"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { loginUser } from "@/redux/slices/authSlice"
+import { UserRole } from "@/utils/interface"
+import  { AxiosError } from "axios"
+import { useDispatch } from "react-redux"
+import type { AppDispatch } from "@/redux/store"
 
 type LoginSchema = z.infer<typeof loginSchema>
 
@@ -17,6 +22,7 @@ type LoginSchema = z.infer<typeof loginSchema>
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>()
 
   const {
     register,
@@ -26,9 +32,26 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log("Form submitted with data:", data);
-  }
+  const onSubmit: SubmitHandler<LoginSchema> = async data => {
+        try {
+            const { meta: responseData } = await dispatch(loginUser(data))
+            const user = localStorage.getItem('user')
+            const userData = JSON.parse(user || '{}')
+            if (responseData.requestStatus === 'fulfilled') {
+                if (userData.roles === UserRole.DOCTOR) {
+                    navigate('/dashboard')
+                    console.log('Successfully logged in!')
+                } else if (userData.roles === UserRole.PATIENT) {
+                    navigate('/dashboard')
+                    console.log('Successfully logged in!')
+                }
+            } else {
+                console.log('Login failed')
+            }
+        } catch (error) {
+            console.log(error as AxiosError)
+        }
+    }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
