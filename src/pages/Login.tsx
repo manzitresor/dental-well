@@ -14,7 +14,9 @@ import { loginUser } from "@/redux/slices/authSlice"
 import { UserRole } from "@/utils/interface"
 import  { AxiosError } from "axios"
 import { useDispatch } from "react-redux"
-import type { AppDispatch } from "@/redux/store"
+import  type { AppDispatch } from "@/redux/store"
+import toast from 'react-hot-toast'
+import { handleAxiosError } from "@/utils/helpers"
 
 type LoginSchema = z.infer<typeof loginSchema>
 
@@ -30,6 +32,11 @@ export default function LoginPage() {
     formState: { errors }
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
+    mode: 'all',
+    defaultValues: {
+      email: '',
+      password: ''
+    }
   })
 
   const onSubmit: SubmitHandler<LoginSchema> = async data => {
@@ -40,16 +47,16 @@ export default function LoginPage() {
             if (responseData.requestStatus === 'fulfilled') {
                 if (userData.roles === UserRole.DOCTOR) {
                     navigate('/dashboard')
-                    console.log('Successfully logged in!')
+                    toast.success('Successfully logged in!')
                 } else if (userData.roles === UserRole.PATIENT) {
                     navigate('/dashboard')
-                    console.log('Successfully logged in!')
+                    toast.success('Successfully logged in!')
                 }
             } else {
-                console.log('Login failed')
+                toast.error('Login failed')
             }
         } catch (error) {
-            console.log(error as AxiosError)
+            handleAxiosError(error as AxiosError)
         }
     }
 
@@ -128,9 +135,8 @@ export default function LoginPage() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-green-800 hover:bg-green-700 cursor-pointer" 
+                className="w-full bg-green-800 hover:bg-green-700 cursor-pointer"
               >
-                Sign In
               </Button>
             </form>
 
@@ -152,3 +158,4 @@ export default function LoginPage() {
     </div>
   )
 }
+
