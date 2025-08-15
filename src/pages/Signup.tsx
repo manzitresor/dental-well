@@ -8,8 +8,14 @@ import {Link, useNavigate} from 'react-router-dom'
 import { TbDental } from "react-icons/tb"
 import { singupSchema } from "@/utils/schema"
 import z from "zod"
-import { useForm } from "react-hook-form"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { signUpUser } from "@/redux/slices/authSlice"
+import { handleAxiosError } from "@/utils/helpers"
+import type { AxiosError } from "axios"
+import toast from "react-hot-toast"
+import { useDispatch } from "react-redux"
+import type { AppDispatch } from "@/redux/store"
 
 type SingupSchema = z.infer<typeof singupSchema>
 
@@ -17,6 +23,7 @@ type SingupSchema = z.infer<typeof singupSchema>
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>()
 
   const {
     register,
@@ -24,11 +31,36 @@ export default function Signup() {
     formState: { errors }
   } = useForm<SingupSchema>({
     resolver: zodResolver(singupSchema),
+    mode: 'all',
+    defaultValues: {
+      fullName: '',
+      email: '',
+      phoneNumber: '',
+      password: '',
+      confirmPassword: ''
+    }
   })
 
-  const onSubmit = (data: SingupSchema) => {
-    console.log("Form submitted with data:", data);
-  }
+    const onSubmit: SubmitHandler<SingupSchema> = async ({fullName, email, phoneNumber, password}: SingupSchema) => {
+        try {
+            const signupData = {
+                  fullName,
+                  email,
+                  phoneNumber,
+                  password,
+              }
+
+            const { meta: responseData } = await dispatch(signUpUser(signupData))
+            if (responseData.requestStatus === 'fulfilled') {
+                toast.success('Successfully created a user account!')
+                navigate('/login')
+            } else {
+                toast.error('Failed to create a user account. Please try again.')
+            }
+        } catch (error) {
+            handleAxiosError(error as AxiosError)
+        }
+    }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
