@@ -1,6 +1,7 @@
 import Dashboard from "@/pages/Dashboard";
 import HomePage from "@/pages/HomePage";
 import Login from "@/pages/Login";
+import PatientPortal from "@/pages/PatientPortal";
 import Signup from "@/pages/Signup";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -21,5 +22,9 @@ export const router = createBrowserRouter([
     {
         path: 'dashboard',
         element: <Dashboard />
+    },
+    {
+        path: 'patient-portal',
+        element: <PatientPortal/>
     }
 ])

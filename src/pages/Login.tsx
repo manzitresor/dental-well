@@ -41,8 +41,10 @@ export default function LoginPage() {
             const userData = result.payload.user;            
             toast.success('Successfully logged in!')
 
-            if (userData.roles === UserRole.DOCTOR || userData.roles === UserRole.PATIENT) {
+            if (userData.roles === UserRole.DOCTOR) {
                 navigate('/dashboard')
+            } else {
+              navigate('/patient-portal')
             }
         } else if (result.meta.requestStatus === 'rejected') {
             const errorMessage = result.payload as string || 'Login failed'
