@@ -8,15 +8,23 @@ import {Link, useNavigate} from 'react-router-dom'
 import { TbDental } from "react-icons/tb"
 import { loginSchema } from "@/utils/schema"
 import z from "zod"
-import { useForm } from "react-hook-form"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { loginUser } from "@/redux/slices/authSlice"
+import { UserRole } from "@/utils/interface"
+import  { AxiosError } from "axios"
+import { useDispatch, useSelector } from "react-redux"
+import type { AppDispatch, RootState } from "@/redux/store"
+import toast from "react-hot-toast"
+import { handleAxiosError } from "@/utils/helpers"
 
 type LoginSchema = z.infer<typeof loginSchema>
-
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>()
+  const { loading } = useSelector((state: RootState) => state.auth)
 
   const {
     register,
@@ -26,8 +34,26 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log("Form submitted with data:", data);
+  const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
+    try {
+        const result = await dispatch(loginUser(data))
+        if (result.meta.requestStatus === 'fulfilled') {
+            const userData = result.payload.user;            
+            toast.success('Successfully logged in!')
+
+            if (userData.roles === UserRole.DOCTOR || userData.roles === UserRole.PATIENT) {
+                navigate('/dashboard')
+            }
+        } else if (result.meta.requestStatus === 'rejected') {
+            const errorMessage = result.payload as string || 'Login failed'
+            toast.error(errorMessage)
+            console.log('Login rejected:', errorMessage)
+        }
+    } catch (error) {
+        console.error('Login error:', error)
+        handleAxiosError(error as AxiosError)
+        toast.error('An unexpected error occurred')
+    }
   }
 
   return (
@@ -64,6 +90,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="Enter your email"
                   {...register("email")}
+                  disabled={loading}
                 />
                 {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
               </div>
@@ -76,6 +103,7 @@ export default function LoginPage() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     {...register("password")}
+                    disabled={loading}
                   />
                   <Button
                     type="button"
@@ -83,6 +111,7 @@ export default function LoginPage() {
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={loading}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4 text-gray-400" />
@@ -106,8 +135,9 @@ export default function LoginPage() {
               <Button 
                 type="submit" 
                 className="w-full bg-green-800 hover:bg-green-700 cursor-pointer" 
+                disabled={loading}
               >
-                Sign In
+                {loading ? 'Signing In...' : 'Sign In'}
               </Button>
             </form>
 
