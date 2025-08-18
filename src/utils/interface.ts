@@ -30,3 +30,12 @@ export interface AuthState {
   loading: boolean | false ,
   error: unknown
 }
+
+export interface Appointment {
+  id: string
+  date: string
+  time: string
+  treatment: string
+  status: "Scheduled" | "Confirmed" | "Completed" | "Cancelled"
+  notes?: string
+}
