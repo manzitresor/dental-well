@@ -1,14 +1,24 @@
 import PortalHeader from "@/components/layout/PortalHeader"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import type { Appointment } from "@/utils/interface"
-import { Calendar} from "lucide-react"
+import { Calendar, Clock } from "lucide-react"
 import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
+import BookingDialog from "@/components/layout/BookingDialog"
+import { getStatusColor } from "@/utils/helpers"
+import { availableTimes, treatments } from "@/data/patient"
 
 export default function PatientPortal() {
   const user = localStorage.getItem('user')
     const fullName = JSON.parse(user as string).fullName
     
+    const [isBookingOpen, setIsBookingOpen] = useState(false)
+     const [newAppointment, setNewAppointment] = useState({
+        date: "",
+        time: "",
+        treatment: "",
+        notes: "",
+      })
     const [appointments, setAppointments] = useState<Appointment[]>([
     {
       id: "1",
@@ -27,19 +37,17 @@ export default function PatientPortal() {
       notes: "Initial consultation completed",
     },
   ])
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Scheduled":
-        return "bg-yellow-100 text-yellow-800"
-      case "Confirmed":
-        return "bg-green-100 text-green-800"
-      case "Completed":
-        return "bg-blue-100 text-blue-800"
-      case "Cancelled":
-        return "bg-red-100 text-red-800"
-      default:
-        return "bg-gray-100 text-gray-800"
+ 
+
+   const handleBookAppointment = () => {
+    const appointment: Appointment = {
+      id: (appointments.length + 1).toString(),
+      ...newAppointment,
+      status: "Scheduled",
     }
+    setAppointments([...appointments, appointment])
+    setNewAppointment({ date: "", time: "", treatment: "", notes: "" })
+    setIsBookingOpen(false)
   }
     const upcomingAppointments = appointments.filter((apt) => apt.status === "Scheduled" || apt.status === "Confirmed")
   return (
@@ -68,7 +76,7 @@ export default function PatientPortal() {
                       <div className="text-sm text-gray-600">
                         {upcomingAppointments[0].time} - {upcomingAppointments[0].treatment}
                       </div>
-                      <Badge className={getStatusColor(upcomingAppointments[0].status)} size="sm">
+                      <Badge className={getStatusColor(upcomingAppointments[0].status)}>
                         {upcomingAppointments[0].status}
                       </Badge>
                     </div>
@@ -77,6 +85,26 @@ export default function PatientPortal() {
                   )}
                 </CardContent>
               </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-2xl">
+                      <Clock className="mr-2 text-green-800" />
+                      Quick Book
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <BookingDialog
+                      isOpen={isBookingOpen}
+                      onOpenChange={setIsBookingOpen}
+                      availableTimes={availableTimes}
+                      treatments={treatments}
+                      newAppointment={newAppointment}
+                      setNewAppointment={setNewAppointment}
+                      handleBookAppointment={handleBookAppointment}
+                    />
+                  </CardContent>
+                </Card>
+
             </div>
           </div>
       </div>
