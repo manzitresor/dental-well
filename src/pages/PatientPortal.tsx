@@ -1,7 +1,7 @@
 import PortalHeader from "@/components/layout/PortalHeader"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import type { Appointment } from "@/utils/interface"
-import { Calendar, Clock } from "lucide-react"
+import { Calendar, Clock, Mail, Phone, UserIcon } from "lucide-react"
 import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import BookingDialog from "@/components/layout/BookingDialog"
@@ -62,8 +62,8 @@ export default function PatientPortal() {
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Calendar className="h-5 w-5 mr-2 text-blue-600" />
+                  <CardTitle className="flex items-center text-xl">
+                    <Calendar className="h-5 w-5 mr-2 text-green-800" />
                     Next Appointment
                   </CardTitle>
                 </CardHeader>
@@ -85,26 +85,43 @@ export default function PatientPortal() {
                   )}
                 </CardContent>
               </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-2xl">
-                      <Clock className="mr-2 text-green-800" />
-                      Quick Book
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <BookingDialog
-                      isOpen={isBookingOpen}
-                      onOpenChange={setIsBookingOpen}
-                      availableTimes={availableTimes}
-                      treatments={treatments}
-                      newAppointment={newAppointment}
-                      setNewAppointment={setNewAppointment}
-                      handleBookAppointment={handleBookAppointment}
-                    />
-                  </CardContent>
-                </Card>
-
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    <Clock className="mr-2 text-green-800" />
+                    Quick Book
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <BookingDialog
+                    isOpen={isBookingOpen}
+                    onOpenChange={setIsBookingOpen}
+                    availableTimes={availableTimes}
+                    treatments={treatments}
+                    newAppointment={newAppointment}
+                    setNewAppointment={setNewAppointment}
+                    handleBookAppointment={handleBookAppointment}
+                  />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    <UserIcon className="h-5 w-5 mr-2 text-green-800" />
+                    Contact Office
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <Phone className="h-4 w-4 mr-2 text-green-800" />
+                    (250) 788-363-207
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Mail className="h-4 w-4 mr-2 text-green-800" />
+                    info@dentalwellpro.com
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
       </div>
