@@ -1,6 +1,6 @@
 import PortalHeader from "@/components/layout/PortalHeader"
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
-import type { Appointment } from "@/utils/interface"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { AppointmentStatus, type Appointment } from "@/utils/interface"
 import { Calendar, Clock, Mail, Phone, UserIcon } from "lucide-react"
 import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
@@ -27,7 +27,7 @@ export default function PatientPortal() {
         date: "2025-09-15",
         time: "10:00",
         treatment: "Dental Cleaning",
-        status: "Confirmed",
+        status: AppointmentStatus.CONFIRMED,
         notes: "Regular checkup and cleaning",
       },
       {
@@ -35,7 +35,7 @@ export default function PatientPortal() {
         date: "2025-08-20",
         time: "14:30",
         treatment: "Consultation",
-        status: "Completed",
+        status: AppointmentStatus.COMPLETED,
         notes: "Initial consultation completed",
       },
     ])
@@ -45,13 +45,13 @@ export default function PatientPortal() {
     const appointment: Appointment = {
       id: (appointments.length + 1).toString(),
       ...newAppointment,
-      status: "Scheduled",
+      status: AppointmentStatus.PENDING,
     }
     setAppointments([...appointments, appointment])
     setNewAppointment({ date: "", time: "", treatment: "", notes: "" })
     setIsBookingOpen(false)
   }
-    const upcomingAppointments = appointments.filter((apt) => apt.status === "Scheduled" || apt.status === "Confirmed")
+    const upcomingAppointments = appointments.filter((apt) => apt.status === AppointmentStatus.PENDING || apt.status === AppointmentStatus.CONFIRMED)
   return (
         <div className="min-h-screen bg-background">
           <PortalHeader/>
