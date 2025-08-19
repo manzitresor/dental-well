@@ -27,6 +27,25 @@ export const createAppointment = createAsyncThunk(
   }
 );
 
+export const fetchAppointments = createAsyncThunk(
+  'appointments/getAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/appointments');
+      return response.data;
+    } catch (error: unknown) {
+      let errorMessage = 'Failed to fetch appointments';
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        errorMessage = err.response?.data?.message || errorMessage;
+      }
+      return rejectWithValue(
+        typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage),
+      );
+    }
+  }
+);
+
 const appointmentsSlice = createSlice({
   name: 'appointments',
   initialState,
@@ -49,6 +68,18 @@ const appointmentsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+      .addCase(fetchAppointments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAppointments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.appointments = action.payload;
+      })
+      .addCase(fetchAppointments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
