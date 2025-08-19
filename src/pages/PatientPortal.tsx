@@ -31,7 +31,7 @@ export default function PatientPortal() {
           dispatch(fetchAppointments());
     }, [dispatch]);
 
-    const upcomingAppointments = appointments.filter((apt) => apt.status === AppointmentStatus.PENDING || apt.status === AppointmentStatus.CONFIRMED)
+    const upcomingAppointments = appointments?.filter((apt) => apt.status === AppointmentStatus.PENDING || apt.status === AppointmentStatus.CONFIRMED)
 
     
   return (
@@ -52,7 +52,7 @@ export default function PatientPortal() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {upcomingAppointments.length > 0 ? (
+                  {upcomingAppointments?.length > 0 ? (
                     <div>
                       <div className="text-lg font-semibold">
                         {new Date(upcomingAppointments[0].date).toLocaleDateString()}
@@ -122,7 +122,7 @@ export default function PatientPortal() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {appointments.map((appointment) => (
+                    {appointments?.map((appointment) => (
                       <TableRow key={appointment.id}>
                         <TableCell>{new Date(appointment.date).toLocaleDateString()}</TableCell>
                         <TableCell>{appointment.time}</TableCell>
