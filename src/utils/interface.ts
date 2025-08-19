@@ -42,7 +42,7 @@ export interface Appointment {
   id: string
   date: string
   time: string
-  treatment: string
+  service: string
   status: AppointmentStatus
   notes?: string
 }
@@ -55,14 +55,26 @@ export interface BookingDialogProps {
   newAppointment: {
     date: string
     time: string
-    treatment: string
+    service: string
     notes: string
   }
   setNewAppointment: React.Dispatch<React.SetStateAction<{
     date: string
     time: string
-    treatment: string
+    service: string
     notes: string
   }>>
-  handleBookAppointment: () => void
+}
+
+export interface AppointmentsState {
+  appointments: Appointment[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface CreateAppointmentDto {
+  date: string;
+  time: string;
+  service: string;
+  notes?: string;
 }

@@ -6,6 +6,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Plus } from "lucide-react"
 import type { BookingDialogProps } from "@/utils/interface"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import type { AppDispatch } from "@/redux/store"
+import { clearError } from "@/redux/slices/authSlice"
+import { createAppointment } from "@/redux/slices/appointmentSlice"
+import toast from "react-hot-toast"
+import { handleAxiosError } from "@/utils/helpers"
+import type { AxiosError } from "axios"
 
 
 
@@ -16,8 +24,33 @@ export default function BookingDialog({
   treatments,
   newAppointment,
   setNewAppointment,
-  handleBookAppointment,
 }: BookingDialogProps) {
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(()=> {
+    if (isOpen) {
+      dispatch(clearError())
+    }
+  }, [isOpen,dispatch]);
+
+  const handleBookAppointment = async () => {
+    try {
+      const result = await dispatch(createAppointment({
+        date: newAppointment.date,
+        time: newAppointment.time,
+        service: newAppointment.service,
+        notes: newAppointment.notes,
+      }))
+      console.log("Appointment created:", result);
+      onOpenChange(false);
+      toast.success("Appointment booked successfully!");
+    } catch (error) {
+      console.error('Login error:', error)
+        handleAxiosError(error as AxiosError)
+        toast.error('An unexpected error occurred')
+    }
+  };
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -73,7 +106,7 @@ export default function BookingDialog({
             <Label htmlFor="treatment" className="text-right">
               Service
             </Label>
-            <Select onValueChange={(value) => setNewAppointment({ ...newAppointment, treatment: value })}>
+            <Select onValueChange={(value) => setNewAppointment({ ...newAppointment, service: value })}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select service" />
               </SelectTrigger>

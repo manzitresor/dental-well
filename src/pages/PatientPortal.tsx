@@ -11,14 +11,14 @@ import { TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/compon
 import { Table } from "@/components/ui/table"
 
 export default function PatientPortal() {
-  const user = localStorage.getItem('user')
+    const user = localStorage.getItem('user')
     const fullName = JSON.parse(user as string).fullName
     
     const [isBookingOpen, setIsBookingOpen] = useState(false)
     const [newAppointment, setNewAppointment] = useState({
         date: "",
         time: "",
-        treatment: "",
+        service: "",
         notes: "",
       })
     const [appointments, setAppointments] = useState<Appointment[]>([
@@ -39,18 +39,7 @@ export default function PatientPortal() {
         notes: "Initial consultation completed",
       },
     ])
- 
 
-   const handleBookAppointment = () => {
-    const appointment: Appointment = {
-      id: (appointments.length + 1).toString(),
-      ...newAppointment,
-      status: AppointmentStatus.PENDING,
-    }
-    setAppointments([...appointments, appointment])
-    setNewAppointment({ date: "", time: "", treatment: "", notes: "" })
-    setIsBookingOpen(false)
-  }
     const upcomingAppointments = appointments.filter((apt) => apt.status === AppointmentStatus.PENDING || apt.status === AppointmentStatus.CONFIRMED)
   return (
         <div className="min-h-screen bg-background">
@@ -102,7 +91,6 @@ export default function PatientPortal() {
                     treatments={treatments}
                     newAppointment={newAppointment}
                     setNewAppointment={setNewAppointment}
-                    handleBookAppointment={handleBookAppointment}
                   />
                 </CardContent>
               </Card>
