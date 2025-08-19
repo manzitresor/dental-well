@@ -10,7 +10,7 @@ import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import type { AppDispatch } from "@/redux/store"
 import { clearError } from "@/redux/slices/authSlice"
-import { createAppointment } from "@/redux/slices/appointmentSlice"
+import { createAppointment, fetchAppointments } from "@/redux/slices/appointmentSlice"
 import toast from "react-hot-toast"
 import { handleAxiosError } from "@/utils/helpers"
 import type { AxiosError } from "axios"
@@ -36,13 +36,13 @@ export default function BookingDialog({
 
   const handleBookAppointment = async () => {
     try {
-      const result = await dispatch(createAppointment({
+      await dispatch(createAppointment({
         date: newAppointment.date,
         time: newAppointment.time,
         service: newAppointment.service,
         notes: newAppointment.notes,
       }))
-      console.log("Appointment created:", result);
+      await dispatch(fetchAppointments());
       onOpenChange(false);
       toast.success("Appointment booked successfully!");
     } catch (error) {
