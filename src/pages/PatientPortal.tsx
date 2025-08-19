@@ -1,5 +1,5 @@
 import PortalHeader from "@/components/layout/PortalHeader"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
 import type { Appointment } from "@/utils/interface"
 import { Calendar, Clock, Mail, Phone, UserIcon } from "lucide-react"
 import { useState } from "react"
@@ -7,36 +7,38 @@ import { Badge } from "@/components/ui/badge"
 import BookingDialog from "@/components/layout/BookingDialog"
 import { getStatusColor } from "@/utils/helpers"
 import { availableTimes, treatments } from "@/data/patient"
+import { TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
+import { Table } from "@/components/ui/table"
 
 export default function PatientPortal() {
   const user = localStorage.getItem('user')
     const fullName = JSON.parse(user as string).fullName
     
     const [isBookingOpen, setIsBookingOpen] = useState(false)
-     const [newAppointment, setNewAppointment] = useState({
+    const [newAppointment, setNewAppointment] = useState({
         date: "",
         time: "",
         treatment: "",
         notes: "",
       })
     const [appointments, setAppointments] = useState<Appointment[]>([
-    {
-      id: "1",
-      date: "2025-09-15",
-      time: "10:00",
-      treatment: "Dental Cleaning",
-      status: "Confirmed",
-      notes: "Regular checkup and cleaning",
-    },
-    {
-      id: "2",
-      date: "2025-08-20",
-      time: "14:30",
-      treatment: "Consultation",
-      status: "Completed",
-      notes: "Initial consultation completed",
-    },
-  ])
+      {
+        id: "1",
+        date: "2025-09-15",
+        time: "10:00",
+        treatment: "Dental Cleaning",
+        status: "Confirmed",
+        notes: "Regular checkup and cleaning",
+      },
+      {
+        id: "2",
+        date: "2025-08-20",
+        time: "14:30",
+        treatment: "Consultation",
+        status: "Completed",
+        notes: "Initial consultation completed",
+      },
+    ])
  
 
    const handleBookAppointment = () => {
@@ -123,6 +125,37 @@ export default function PatientPortal() {
                 </CardContent>
               </Card>
             </div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl text-center text-green-800 font-bold">Appointments</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Time</TableHead>
+                      <TableHead>Service</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Notes</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {appointments.map((appointment) => (
+                      <TableRow key={appointment.id}>
+                        <TableCell>{new Date(appointment.date).toLocaleDateString()}</TableCell>
+                        <TableCell>{appointment.time}</TableCell>
+                        <TableCell>{appointment.treatment}</TableCell>
+                        <TableCell>
+                          <Badge className={getStatusColor(appointment.status)}>{appointment.status}</Badge>
+                        </TableCell>
+                        <TableCell>{appointment.notes || "N/A"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
       </div>
   )
