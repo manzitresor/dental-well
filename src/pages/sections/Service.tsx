@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import  { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 export default function Service() {
       const services = [
@@ -31,7 +32,7 @@ export default function Service() {
                 </CardHeader>
                 <CardContent>
                   <Button variant="outline" className="w-full bg-green-800 text-white cursor-pointer">
-                    Book Now
+                    <Link to='/login'>Book Now</Link>
                   </Button>
                 </CardContent>
               </Card>

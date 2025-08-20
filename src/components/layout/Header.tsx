@@ -23,7 +23,7 @@ export default function Header() {
                 <Button className="bg-white text-black cursor-pointer hover:bg-lime-50 hover:text-black" >
                 <Link to='/login'>Login</Link>
                 </Button>
-                <Button className="bg-white text-black cursor-pointer hover:bg-lime-50 hover:text-black">Book Appointment</Button>
+                <Button className="bg-white text-black cursor-pointer hover:bg-lime-50 hover:text-black"><Link to='/login'>Book Appointment</Link></Button>
             </nav>
         </div>
     </header>
