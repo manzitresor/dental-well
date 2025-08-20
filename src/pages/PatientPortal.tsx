@@ -1,57 +1,39 @@
 import PortalHeader from "@/components/layout/PortalHeader"
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
-import type { Appointment } from "@/utils/interface"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { AppointmentStatus } from "@/utils/interface"
 import { Calendar, Clock, Mail, Phone, UserIcon } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import BookingDialog from "@/components/layout/BookingDialog"
 import { getStatusColor } from "@/utils/helpers"
 import { availableTimes, treatments } from "@/data/patient"
 import { TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Table } from "@/components/ui/table"
+import type { AppDispatch, RootState } from "@/redux/store"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchAppointments } from "@/redux/slices/appointmentSlice"
 
 export default function PatientPortal() {
-  const user = localStorage.getItem('user')
+    const user = localStorage.getItem('user')
     const fullName = JSON.parse(user as string).fullName
+    const dispatch = useDispatch<AppDispatch>()
     
     const [isBookingOpen, setIsBookingOpen] = useState(false)
     const [newAppointment, setNewAppointment] = useState({
         date: "",
         time: "",
-        treatment: "",
+        service: "",
         notes: "",
       })
-    const [appointments, setAppointments] = useState<Appointment[]>([
-      {
-        id: "1",
-        date: "2025-09-15",
-        time: "10:00",
-        treatment: "Dental Cleaning",
-        status: "Confirmed",
-        notes: "Regular checkup and cleaning",
-      },
-      {
-        id: "2",
-        date: "2025-08-20",
-        time: "14:30",
-        treatment: "Consultation",
-        status: "Completed",
-        notes: "Initial consultation completed",
-      },
-    ])
- 
+    const appointments = useSelector((state: RootState) => state.appointment.appointments); 
 
-   const handleBookAppointment = () => {
-    const appointment: Appointment = {
-      id: (appointments.length + 1).toString(),
-      ...newAppointment,
-      status: "Scheduled",
-    }
-    setAppointments([...appointments, appointment])
-    setNewAppointment({ date: "", time: "", treatment: "", notes: "" })
-    setIsBookingOpen(false)
-  }
-    const upcomingAppointments = appointments.filter((apt) => apt.status === "Scheduled" || apt.status === "Confirmed")
+    useEffect(() => {
+          dispatch(fetchAppointments());
+    }, [dispatch]);
+
+    const upcomingAppointments = appointments?.filter((apt) => apt.status === AppointmentStatus.PENDING || apt.status === AppointmentStatus.CONFIRMED)
+
+    
   return (
         <div className="min-h-screen bg-background">
           <PortalHeader/>
@@ -70,13 +52,13 @@ export default function PatientPortal() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {upcomingAppointments.length > 0 ? (
+                  {upcomingAppointments?.length > 0 ? (
                     <div>
                       <div className="text-lg font-semibold">
                         {new Date(upcomingAppointments[0].date).toLocaleDateString()}
                       </div>
                       <div className="text-sm text-gray-600">
-                        {upcomingAppointments[0].time} - {upcomingAppointments[0].treatment}
+                        {upcomingAppointments[0].time} - {upcomingAppointments[0].service}
                       </div>
                       <Badge className={getStatusColor(upcomingAppointments[0].status)}>
                         {upcomingAppointments[0].status}
@@ -102,7 +84,6 @@ export default function PatientPortal() {
                     treatments={treatments}
                     newAppointment={newAppointment}
                     setNewAppointment={setNewAppointment}
-                    handleBookAppointment={handleBookAppointment}
                   />
                 </CardContent>
               </Card>
@@ -141,11 +122,11 @@ export default function PatientPortal() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {appointments.map((appointment) => (
+                    {appointments?.map((appointment) => (
                       <TableRow key={appointment.id}>
                         <TableCell>{new Date(appointment.date).toLocaleDateString()}</TableCell>
                         <TableCell>{appointment.time}</TableCell>
-                        <TableCell>{appointment.treatment}</TableCell>
+                        <TableCell>{appointment.service}</TableCell>
                         <TableCell>
                           <Badge className={getStatusColor(appointment.status)}>{appointment.status}</Badge>
                         </TableCell>
